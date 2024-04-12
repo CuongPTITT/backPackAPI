@@ -15,55 +15,54 @@ class AuthController extends Controller
     public function login(Request $request)
     {
         $credentials = $request->only('email', 'password');
-        $token = Auth::guard('api')->attempt($credentials);
-
         try {
-            if (!$token = auth()->attempt($credentials)) {
-                return [
+            $token = Auth::guard('api')->attempt($credentials);
+
+            if (!$token) {
+                return response()->json([
                     'status' => 500,
                     'message' => 'Failed'
-                ];
+                ]);
             }
 
             $user = Auth::guard('api')->user();
 
             $user->authorisation = $this->respondWithToken($token)->getData();
 
+            return response()->json([
+                'status' => 200,
+                'message' => 'Success',
+                'user' => $user,
+                'authorisation' => [
+                    'token' => $token,
+                    'type' => 'bearer',
+                ]
+            ]);
         } catch (\Exception $e) {
-            return [
+            return response()->json([
                 'status' => 500,
                 'message' => $e
-            ];
+            ]);
         }
-        return [
-            'status' => 200,
-            'message' => 'Success',
-            'user' => $user,
-            'authorisation' => [
-                'token' => $token,
-                'type' => 'bearer',
-            ]
-        ];
     }
 
     public function logout()
     {
-
         try {
 
             Auth::guard('api')->logout();
 
         } catch (\Exception $e) {
-            return [
+            return response()->json([
                 'status' => 500,
                 'message' => $e
-            ];
+            ]);
         }
 
-        return [
+        return response()->json([
             'status' => 200,
             'message' => 'Success'
-        ];
+        ]);
     }
 
     public function me()

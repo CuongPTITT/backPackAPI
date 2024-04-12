@@ -10,8 +10,8 @@ class CheckLogin
 {
     public function handle(Request $request, Closure $next)
     {
-        if (!backpack_auth()->check()) {
-            return redirect()->route('http://127.0.0.1:8000/admin/post');
+        if (!Auth::check()) {
+            return redirect()->route('/home');
         }
 
         return $next($request);

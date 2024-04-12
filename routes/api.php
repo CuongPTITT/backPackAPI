@@ -19,9 +19,4 @@ Route::post('auth/logout', [App\Http\Controllers\User\AuthController::class, 'lo
 Route::get('/me', [App\Http\Controllers\User\AuthController::class, 'me'])->name('me');
 Route::post('/register', [App\Http\Controllers\User\AuthController::class, 'register'])->name('register');
 
-//Route::group([
-//    'middleware' => 'auth:api',
-//], function () {
-//    Route::get('/posts', [App\Http\Controllers\HomeController::class, 'list_post'])->name('post.list');
-//    Route::get('/posts/{id}', [App\Http\Controllers\HomeController::class, 'detail_post'])->name('post.detail');
-//});
+Route::post('/update', [App\Http\Controllers\HomeController::class, 'update_post'])->name('post.update_form');

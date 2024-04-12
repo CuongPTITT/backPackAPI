@@ -79,7 +79,7 @@
                     if (response.status === 200) {
                         const userToken = response.authorisation.token;
                         window.localStorage.setItem('token', userToken);
-                        window.location.replace('http://127.0.0.1:8000/home');
+                        window.location.replace('/home');
                     } else {
                         $("#err").hide().html("Email or password is incorrect. Please check.").fadeIn('slow');
                     }

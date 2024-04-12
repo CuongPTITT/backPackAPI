@@ -43,7 +43,8 @@
                     @endif
                 </td>
                 <td style="padding-right: 150px;">
-                    <a href="{{ route('post.detail', ['id' => $post->id]) }}">show</a> |         <a href="">edit</a>
+                    <a href="{{ route('post.detail', ['id' => $post->id]) }}">show</a> |
+                    <a href="{{ route('post.form_edit', ['id' => $post->id]) }}">edit</a>
                 </td>
             </tr>
             @endforeach
@@ -72,6 +73,7 @@
                     'Authorization': 'Bearer ' + user_token
                 },
                 success: function(response) {
+                    console.log(response);
                     if (response.user == null) {
                         window.location.replace('/');
                     } else {
@@ -90,7 +92,7 @@
                     'Authorization': 'Bearer ' + user_token
                 },
                 success: function(response) {
-                    window.location.replace('/');
+                    window.location.replace('/login');
                 }
             });
         }
