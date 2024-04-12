@@ -86,9 +86,6 @@ class PostCrudController extends CrudController
             'name' => 'title',
             'label' => 'Title',
             'type' => 'text',
-            'search' => function ($query, $search) {
-                return $query->where('name', 'like', "%{$search}%");
-            }
         ]);
 
         CRUD::addField([
