@@ -15,8 +15,10 @@
             @endif
 
             <p id='username'> You are Logged In</p>
-
-            <button type="button" class="btn btn-primary" onclick="logout()">Logout</button>
+                @if(\Illuminate\Support\Facades\Auth::check())
+                    <button type="button" class="btn btn-primary" onclick="logout()">Logout</button>
+                @endif
+                    <button type="button" class="btn btn-primary" onclick="login()">Login</button>
         </div>
         <table id='listpost'>
             <tr>
@@ -95,6 +97,10 @@
                     window.location.replace('/login');
                 }
             });
+        }
+
+        function login() {
+            window.location.replace('/login');
         }
     </script>
 </body>
