@@ -16,8 +16,6 @@ Route::group([
     ),
     'namespace'  => 'App\Http\Controllers\Admin',
 ], function () {
-    Route::group(['middleware' => ['check.login']], function () {
     Route::crud('user', 'UserCrudController');
     Route::crud('post', 'PostCrudController');
-    });
 });
