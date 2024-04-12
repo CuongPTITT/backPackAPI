@@ -48,6 +48,13 @@
             </tr>
             @endforeach
         </table>
+        <div class="row justify-content-center">
+            <div class="col-md-3 offset-md-1 mt-3">
+                <ul class="pagination ">
+                    {{ $posts->links("pagination::bootstrap-4") }}
+                </ul>
+            </div>
+        </div>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
     <script>
