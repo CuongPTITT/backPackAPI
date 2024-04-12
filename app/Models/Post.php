@@ -42,31 +42,14 @@ class Post extends Model
 
     public function setImageAttribute($value)
     {
-        $attribute_name = "image";
-        // destination path relative to the disk above
-        $destination_path = "public/articles";
+        if ($value) {
+            $image_name = uniqid() . '_' . $value->getClientOriginalName();
 
-        // if the image was erased
-        if ($value==null) {
-            // delete the image from disk
-            Storage::delete($this->{$attribute_name});
+            $path = $value->storeAs('public/uploads', $image_name);
 
-            // set null in the database column
-            $this->attributes[$attribute_name] = null;
-        }
+            $full_path = 'storage/' . str_replace('public/', '', $path);
 
-        if (Str::startsWith($value, 'data:image'))
-        {
-            $image = Image::make($value)->encode('jpg', 90);
-
-            $filename = md5($value.time()).'.jpg';
-
-            Storage::put($destination_path.'/'.$filename, $image->stream());
-
-            Storage::delete(Str::replaceFirst('storage/','public/', $this->{$attribute_name}));
-
-            $public_destination_path = Str::replaceFirst('public/', 'storage/', $destination_path);
-            $this->attributes[$attribute_name] = $public_destination_path.'/'.$filename;
+            $this->attributes['image'] = $full_path;
         }
     }
 

@@ -13,6 +13,10 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('register', [App\Http\Controllers\User\AuthController::class, 'registerForm'])->name('register.form');
+Route::get('login', [App\Http\Controllers\User\AuthController::class, 'loginForm'])->name('login.form');
+
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'home']);
+
+
+Route::get('/posts/{id}', [App\Http\Controllers\HomeController::class, 'detail_post'])->name('post.detail');
