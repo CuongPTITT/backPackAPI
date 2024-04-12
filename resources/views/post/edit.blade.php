@@ -120,10 +120,12 @@
     });
 
     $(document).ready(function() {
+        user_token = window.localStorage.getItem('token');
 
         $.ajaxSetup({
             headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+                'Authorization': 'Bearer ' + user_token
             }
         });
 

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
+use App\Models\Post;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -127,5 +128,30 @@ class AuthController extends Controller
     public function registerForm()
     {
         return view('auth/register');
+    }
+
+    public function update_post(Request $request)
+    {
+        $post_id = $request->input('post_id');
+        $post = Post::find($post_id);
+
+        $fields = ['title', 'description', 'status'];
+
+        foreach ($fields as $field) {
+            if ($request->has($field)) {
+                $post->$field = $request->input($field);
+            }
+        }
+
+        if ($request->hasFile('image')) {
+            $post->image = $request->file('image');
+        }
+
+        $post->save();
+
+        return response()->json([
+            'status' => 200,
+            'message' => 'success',
+        ]);
     }
 }

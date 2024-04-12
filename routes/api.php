@@ -15,8 +15,10 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::post('auth/login', [App\Http\Controllers\User\AuthController::class, 'login'])->name('login');
-Route::post('auth/logout', [App\Http\Controllers\User\AuthController::class, 'logout'])->name('logout');
-Route::get('/me', [App\Http\Controllers\User\AuthController::class, 'me'])->name('me');
 Route::post('/register', [App\Http\Controllers\User\AuthController::class, 'register'])->name('register');
 
-Route::post('/update', [App\Http\Controllers\HomeController::class, 'update_post'])->name('post.update_form');
+Route::group(['middleware' => 'auth:api'], function () {
+    Route::post('auth/logout', [App\Http\Controllers\User\AuthController::class, 'logout'])->name('logout');
+    Route::get('/me', [App\Http\Controllers\User\AuthController::class, 'me'])->name('me');
+    Route::post('/update', [App\Http\Controllers\User\AuthController::class, 'update_post'])->name('post.update_form');
+});
