@@ -41,21 +41,12 @@ class PostCrudController extends CrudController
     protected function setupListOperation()
     {
         $this->crud->addColumn([
-            'name' => 'id',
-            'label' => 'ID',
-            'type' => 'int'
-        ]);
-
-        $this->crud->addColumn([
             'name' => 'image',
             'label' => 'Thumbnail',
             'type' => 'image',
             'wrapper' => [
-                'style' => 'display: flex; align-items: center; justify-content: center; width: 20px; height: 20px;'
-            ],
-            'url' => function($entity) {
-                return asset("storage/uploads/{$entity->image}");
-            },
+                'style' => 'display: flex; align-items: center; justify-content: center; width: 30px; height: 30px;'
+            ]
         ]);
 
         $this->crud->addColumn([
@@ -152,15 +143,6 @@ class PostCrudController extends CrudController
 
         $this->setupCreateOperation();
         $this->crud->setOperationSetting('showDeleteButton', true);
-    }
-
-
-
-    public function destroy($id)
-    {
-        CRUD::hasAccessOrFail('delete');
-
-        return CRUD::delete($id);
     }
 
     protected function setupShowOperation()
