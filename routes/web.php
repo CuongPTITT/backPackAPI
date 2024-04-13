@@ -19,5 +19,8 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'home']);
 
 
 Route::get('/posts/{id}', [App\Http\Controllers\HomeController::class, 'detail_post'])->name('post.detail');
-
 Route::get('/posts/{id}/edit', [App\Http\Controllers\HomeController::class, 'edit_post'])->name('post.form_edit');
+
+Route::get('', function () {
+    return redirect('/login');
+});
