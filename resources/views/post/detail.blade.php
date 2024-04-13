@@ -78,7 +78,7 @@
             },
             success: function(response) {
                 if (response.user == null) {
-                    window.location.replace('/');
+                    window.location.replace('/login');
                 } else {
                     $("#username").text("Welcome " + response.user.name);
                 }

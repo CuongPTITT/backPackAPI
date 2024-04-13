@@ -154,10 +154,6 @@ class PostCrudController extends CrudController
             ->allows_null(false);
 
         $this->setupCreateOperation();
-
-        Alert::success('You have successfully logged in')->flash();
-
-        return Redirect::to('dashboard');
     }
 
     protected function setupShowOperation()
