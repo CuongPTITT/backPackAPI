@@ -6,6 +6,8 @@ use App\Http\Requests\PostRequest;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Redirect;
+use Prologue\Alerts\Facades\Alert;
 
 /**
  * Class PostCrudController
@@ -61,6 +63,7 @@ class PostCrudController extends CrudController
                     $entry->id = 17;
                     return backpack_url('post/'.$entry->id.'/show');
                 },
+                'style' => 'text-decoration: none !important'
             ],
         ]);
 
@@ -151,7 +154,10 @@ class PostCrudController extends CrudController
             ->allows_null(false);
 
         $this->setupCreateOperation();
-        $this->crud->setOperationSetting('showDeleteButton', true);
+
+        Alert::success('You have successfully logged in')->flash();
+
+        return Redirect::to('dashboard');
     }
 
     protected function setupShowOperation()
