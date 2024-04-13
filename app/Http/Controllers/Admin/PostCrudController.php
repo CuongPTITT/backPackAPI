@@ -52,7 +52,16 @@ class PostCrudController extends CrudController
         $this->crud->addColumn([
             'name' => 'title',
             'label' => 'Title',
-            'type' => 'string'
+            'type' => 'text',
+            'wrapper' => [
+                'href' => function ($crud, $column, $entry, $related_key) {
+                    if (!$entry) {
+                        return '';
+                    }
+                    $entry->id = 17;
+                    return backpack_url('post/'.$entry->id.'/show');
+                },
+            ],
         ]);
 
         $this->crud->addColumn([
@@ -164,6 +173,11 @@ class PostCrudController extends CrudController
             ])
             ->allows(false);
 
+    }
+
+    public function getClickableName()
+    {
+        return '<a href="'.url('admin/'.$this->getTable().'/'.$this->getKey()).'">'.$this->name.'</a>';
     }
 
 }
