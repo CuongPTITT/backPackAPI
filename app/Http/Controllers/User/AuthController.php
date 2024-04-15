@@ -154,4 +154,39 @@ class AuthController extends Controller
             'message' => 'success',
         ]);
     }
+
+    public function list_post(Request $request)
+    {
+        $data = Post::paginate(5);
+
+        return response()->json([
+            'status' => 200,
+            'message' => 'Success',
+            'data' => $data->items(),
+            'links' => [
+                'current_page' => $data->currentPage(),
+                'last_page' => $data->lastPage(),
+                'prev_page_url' => $data->previousPageUrl(),
+                'next_page_url' => $data->nextPageUrl()
+            ]
+        ]);
+    }
+
+    public function detail_post_user($id)
+    {
+        $data = Post::find($id);
+
+        if ($data) {
+            return response()->json([
+                'status' => 200,
+                'message' => 'Success',
+                'data' => $data,
+            ]);
+        } else {
+            return response()->json([
+                'status' => 404,
+                'message' => 'Post not found',
+            ]);
+        }
+    }
 }

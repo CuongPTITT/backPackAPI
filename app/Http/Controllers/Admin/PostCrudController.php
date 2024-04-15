@@ -3,9 +3,12 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Requests\PostRequest;
+use App\Models\Post;
+use App\Models\User;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Redirect;
 use Prologue\Alerts\Facades\Alert;
 
@@ -142,7 +145,10 @@ class PostCrudController extends CrudController
             ->type('upload')
             ->upload(true)
             ->disk('public')
-            ->storeDir('uploads');
+            ->storeDir('uploads')
+            ->withFiles([
+                'uploader' => \Backpack\CRUD\app\Library\Uploaders\SingleFile::class,
+            ]);
 
         CRUD::field('status')
             ->label('Status')
@@ -153,6 +159,7 @@ class PostCrudController extends CrudController
             ])
             ->allows_null(false);
 
+        $this->crud->setOperationSetting('showDeleteButton', true);
         $this->setupCreateOperation();
     }
 

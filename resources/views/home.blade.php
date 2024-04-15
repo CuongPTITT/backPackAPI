@@ -30,31 +30,23 @@
                 <th style="padding-right: 150px;">Action</th>
             </tr>
 
-            @foreach($posts as $post)
             <tr>
-                <td style="padding-right: 150px;">{{$post->id}}</td>
-                <td style="padding-right: 150px;">{{$post->title}}</td>
-                <td style="padding-right: 150px;">{{$post->description}}</td>
+                <td style="padding-right: 150px;" id="id"></td>
+                <td style="padding-right: 150px;" id="title"></td>
+                <td style="padding-right: 150px;" id="description"></td>
                 <td style="padding-right: 150px;">
-                    <img src="{{ asset($post->image) }}" height="100" width="100">
-                <td style="padding-right: 150px;">
-                    @if($post->status == 1)
-                        Enable
-                    @else
-                        Disable
-                    @endif
+                    <img id="image" src="" height="100" width="100">
+                <td style="padding-right: 150px;" id="status">
                 </td>
                 <td style="padding-right: 150px;">
-                    <a href="{{ route('post.detail', ['id' => $post->id]) }}">show</a> |
-                    <a href="{{ route('post.form_edit', ['id' => $post->id]) }}">edit</a>
+                    <a href="">show</a> |
+                    <a href="">edit</a>
                 </td>
             </tr>
-            @endforeach
         </table>
         <div class="row justify-content-center">
             <div class="col-md-3 offset-md-1 mt-3">
-                <ul class="pagination ">
-                    {{ $posts->links("pagination::bootstrap-4") }}
+                <ul class="pagination" id="pagination">
                 </ul>
             </div>
         </div>
@@ -63,6 +55,7 @@
     <script>
         $(document).ready(function() {
             me();
+            getListPost();
         });
 
         user_token = window.localStorage.getItem('token');
@@ -83,7 +76,66 @@
                     }
                 }
             });
+        }
 
+        function getListPost(page = 1) {
+            $.ajax({
+                type: 'GET',
+                url: '/api/home?page=' + page,
+                headers: {
+                    'Authorization': 'Bearer ' + user_token
+                },
+                success: function(response) {
+                    console.log(response);
+                    if (response.status === 200) {
+                        var data = response.data;
+                        $('#listpost').empty();
+                        $.each(data, function(index, post) {
+                            var row = '<tr>' +
+                                '<td style="padding-right: 150px;">' + post.id + '</td>' +
+                                '<td style="padding-right: 150px;">' + post.title + '</td>' +
+                                '<td style="padding-right: 150px;">' + post.description + '</td>' +
+                                '<td style="padding-right: 150px;"><img src="' + post.image + '" height="100" width="100"></td>' +
+                                '<td style="padding-right: 150px;">';
+
+                            if (post.status === 1) {
+                                row += '<span>' + 'Disable' + '</span>';
+                            } else {
+                                row +='<span>' + 'Enable' + '</span>';
+                            }
+
+                            row += '</td>' +
+                                '<td style="padding-right: 150px;">' +
+                                '<a href="/posts/' + post.id + '">show</a> | ' +
+                                '<a href="/posts/' + post.id + '/edit">edit</a>' +
+                                '</td>' +
+                                '</tr>';
+
+                            $('#listpost').append(row);
+                        });
+
+                        var pagination = response.links;
+                        $('#pagination').empty();
+
+                        if (pagination.prev_page_url) {
+                            var prevPage = '<li class="page-item"><a class="page-link" href="#" onclick="getListPost(' + (pagination.current_page - 1) + '); return false;">Previous</a></li>';
+                            $('#pagination').append(prevPage);
+                        }
+
+                        for (var i = 1; i <= pagination.last_page; i++) {
+                            var page = '<li class="page-item' + (i === pagination.current_page ? ' active' : '') + '"><a class="page-link" href="#" onclick="getListPost(' + i + '); return false;">' + i + '</a></li>';
+                            $('#pagination').append(page);
+                        }
+
+                        if (pagination.next_page_url) {
+                            var nextPage = '<li class="page-item"><a class="page-link" href="#" onclick="getListPost(' + (pagination.current_page + 1) + '); return false;">Next</a></li>';
+                            $('#pagination').append(nextPage);
+                        }
+                    }
+                },
+                error: function(xhr, status, error) {
+                }
+            });
         }
 
         function logout() {

@@ -30,7 +30,7 @@
                             </div>
                         @endif
 
-                        <table>
+                            <table id='detailpost'>
 
                             <tr>
                                 <th>ID</th>
@@ -41,17 +41,13 @@
                             </tr>
 
                             <tr>
-                                <td style="padding-right: 150px;">{{$post->id}}</td>
-                                <td style="padding-right: 150px;">{{$post->title}}</td>
-                                <td style="padding-right: 150px;">{{$post->description}}</td>
+                                <td style="padding-right: 150px;" id="id"></td>
+                                <td style="padding-right: 150px;" id="title"></td>
+                                <td style="padding-right: 150px;" id="description"></td>
                                 <td style="padding-right: 150px;">
-                                    <img src="{{ asset($post->image) }}" height="100" width="100">
+                                    <img id="image" src="" height="100" width="100">
+                                <td style="padding-right: 150px;" id="status">
                                 </td>
-                                @if($post->status == 1)
-                                    <td style="padding-right: 150px;">Enable</td>
-                                @else
-                                    <td style="padding-right: 150px;">Disable</td>
-                                @endif
                             </tr>
                         </table>
                         <a href="/home">back</a>
@@ -65,6 +61,7 @@
 <script>
     $(document).ready(function() {
         me();
+        detailPost();
     });
 
     user_token = window.localStorage.getItem('token');
@@ -85,6 +82,30 @@
             }
         });
 
+    }
+    function detailPost() {
+        var url = window.location.href;
+        var id = url.substring(url.lastIndexOf('/') + 1);
+
+        $.ajax({
+            type: 'GET',
+            url: '/api/post/' + id,
+            headers: {
+                'Authorization': 'Bearer ' + user_token
+            },
+            success: function(response) {
+                if (response.status === 200) {
+                    var post = response.data;
+                    $('#id').text(post.id);
+                    $('#title').text(post.title);
+                    $('#description').text(post.description);
+                    $('#image').attr('src', 'http://127.0.0.1:8000/' + post.image);
+                    $('#status').text(post.status === 1 ? 'Disable' : 'Enable');
+                }
+            },
+            error: function(xhr, status, error) {
+            }
+        });
     }
 
     function logout() {

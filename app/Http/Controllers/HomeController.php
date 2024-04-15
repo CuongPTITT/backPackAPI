@@ -11,16 +11,12 @@ class HomeController extends Controller
 {
     public function home(Request $request)
     {
-        $posts = Post::paginate(10);
-
-        return view('home', ['posts' => $posts]);
+        return view('home');
     }
 
     public function detail_post($id)
     {
-        $post = Post::find($id);
-
-        return view('post.detail', ['post' => $post]);
+        return view('post.detail');
     }
 
     public function edit_post($id)
